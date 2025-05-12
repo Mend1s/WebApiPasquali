@@ -9,6 +9,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPessoaService, PessoaService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularClient",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowAnyOrigin();
+        });
+});
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -18,6 +31,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngularClient");
 
 app.UseAuthorization();
 
